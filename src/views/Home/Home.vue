@@ -17,12 +17,12 @@
   </div>
 
   <section class="Home-section"
-           aria-label="Insurance for International Visitors">
+           aria-labelledby="Home-insuranceTitle">
     <img class="Home-sectionImage"
          alt=""
          src="https://picsum.photos/id/866/600/300"/>
     <div class="Home-sectionContent">
-      <h2>Insurance for International Visitors</h2>
+      <h2 id="Home-insuranceTitle">Insurance for International Visitors</h2>
       <p>It is a long established fact that a reader will be distracted by the readable
         content of a page when looking at its layout.</p>
       <ul>
@@ -34,9 +34,9 @@
   </section>
 
   <section class="Home-section"
-           aria-label="Safe travel">
+           aria-labelledby="Home-safeTravelTitle">
     <div class="Home-sectionContent">
-      <h2>Safe travel</h2>
+      <h2 id="Home-safeTravelTitle">Safe travel</h2>
       <p>It is a long established fact that a reader will be distracted by the readable
         content of a page when looking at its layout.</p>
     </div>
@@ -46,8 +46,8 @@
   </section>
 
   <section class="Home-section Home-section--articles"
-           aria-label="Explore Our Travel Topics">
-    <h2>Explore Our Travel Topics</h2>
+           aria-labelledby="Home-articlesTitle">
+    <h2 id="Home-articlesTitle">Explore Our Travel Topics</h2>
 
     <div class="Home-articles">
       <router-link class="Home-article"

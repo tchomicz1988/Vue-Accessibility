@@ -39,6 +39,7 @@
 
   --color-background: var(--color-white);
   --primary-color-1: var(--color-orange);
+  --color-error: #FF0000;
 
 }
 
@@ -48,6 +49,8 @@
 
 *:focus{
   outline-color: var(--primary-color-1);
+  outline-style: solid;
+  outline-width: 2px;
   outline-offset: 4px;
 }
 
@@ -152,7 +155,9 @@ option{
   }
 }
 
-input, select {
+input:not([type=checkbox]):not([type=radio]),
+textarea,
+select {
   display: inline-block;
   appearance: none;
   background-color: var(--color-white);
