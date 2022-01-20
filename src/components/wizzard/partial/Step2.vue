@@ -2,10 +2,12 @@
 
 import CountrySelect from '../../CountrySelect/CountrySelect.vue';
 import FormLabel from '../../form/FormLabel.vue'
-import Step1 from './Step1.vue';
+import FormError from '../../form/FormError.vue';
+import { claimReportStep2 } from '../../../views/ClaimReport/claimReport.Interface';
 
 const props = defineProps<{
-  number
+  form: claimReportStep2;
+  validation: any;
 }>();
 
 </script>
@@ -18,25 +20,39 @@ const props = defineProps<{
          aria-labelledby="groupTravel">
       <FormLabel class="Step-input"
                  id="groupTravel"
-                 required="true"
+                 :required="true"
                  label="Propose of travel">
       </FormLabel>
 
-      <label><input type="radio" name="purposeOfTravel" value="tourism"/> tourism </label>
-      <label><input type="radio" name="purposeOfTravel" value="study"/> study / mental work </label>
-      <label><input type="radio" name="purposeOfTravel" value="physical"/> physical work </label>
-      <label><input type="radio" name="purposeOfTravel" value="height-risk"/> height-risk sport </label>
+      <label class="Step-radioOption">
+        <input type="radio" name="purposeOfTravel" value="tourism" v-model="form.proposeOfTravel" /> tourism </label>
+      <label class="Step-radioOption">
+        <input type="radio" name="purposeOfTravel" value="study" v-model="form.proposeOfTravel"/> study / mental work
+      </label>
+      <label class="Step-radioOption">
+        <input type="radio" name="purposeOfTravel" value="physical" v-model="form.proposeOfTravel"/> physical work
+      </label>
+      <label class="Step-radioOption">
+        <input type="radio" name="purposeOfTravel" value="height-risk" v-model="form.proposeOfTravel"/> height-risk sport
+      </label>
     </div>
+    <FormError :message="validation.proposeOfTravel.$errors[0]?.$message"/>
     <br>
-    <FormLabel required="true" label="Country">
-      <CountrySelect/>
+    <FormLabel class="Step-input" required="true" label="Country">
+      <CountrySelect v-model="form.country"/>
+      <FormError :message="validation.country.$errors[0]?.$message"/>
     </FormLabel>
 
-    <FormLabel required="true" label="Date">
-      <input type="date"/>
+    <FormLabel class="Step-input"
+               :required="true"
+               label="Date">
+      <input type="date"
+             v-model="form.date"/>
+      <FormError :message="validation.date.$errors[0]?.$message"/>
     </FormLabel>
-    <FormLabel required="true" label="Incident description">
-      <textarea ></textarea>
+    <FormLabel class="Step-input" :required="true" label="Incident description">
+      <textarea v-model="form.incidentDescription"/>
+      <FormError :message="validation.incidentDescription.$errors[0]?.$message"/>
     </FormLabel>
 
   </form>
@@ -46,5 +62,16 @@ const props = defineProps<{
 .Step-radioGroup {
   display: flex;
   flex-direction: column;
+}
+
+.Step-radioOption {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input {
+    margin-right: 20px;
+  }
 }
 </style>

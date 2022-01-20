@@ -2,28 +2,57 @@
         lang="ts">
 import Step1 from './partial/Step1.vue';
 import Step2 from './partial/Step2.vue';
-import { ref } from 'vue';
+import Step3 from './partial/Step3.vue';
+import { reactive, Ref, ref } from 'vue';
+import useVuelidate, { Validation } from '@vuelidate/core';
+import { CLAIM_REPORT_FORM_VALIDATIONS, CLAIM_REPORT_FORM_VALUES } from './partial/wizzard.constants';
 
-const stepsList = {
+const stepsList: any = {
   'Step1 - Personal Details': Step1,
   'Step2 - Incident Details': Step2,
-  'Step3 - Expense Report': Step2
+  'Step3 - Expense Report': Step3
 };
 
 let current = ref(Step1);
 let currentStep = ref(Object.keys(stepsList)[0]);
 let currentIndex = ref(0);
 
-function changeStep(step, name, index) {
+const form = reactive({...CLAIM_REPORT_FORM_VALUES});
+
+const $v: Ref<Validation> = useVuelidate(CLAIM_REPORT_FORM_VALIDATIONS, form, {$autoDirty: true})
+
+async function submit() {
+
+  const valid = await $v.value.$validate();
+  if(!valid) {
+    return
+  }
+
+}
+
+function isStepValid() {
+  const valid =  $v[`Step${currentIndex+1}`].$invalid;
+  return !valid;
+}
+
+function changeStep(step: any, name: string, index: number) {
+
+  if(!isStepValid) {
+    return
+  }
+
   current.value = step;
   currentStep.value = name;
   currentIndex.value = index
+
 }
 
-function changeStepByIndex(index) {
-  const key = Object.keys(stepsList)[index]
+function changeStepByIndex(index: number) {
+
+  const key: string = Object.keys(stepsList)[index]
   changeStep(stepsList[key], key, index)
 }
+
 </script>
 
 <template>
@@ -47,31 +76,34 @@ function changeStepByIndex(index) {
                  v-bind:is="current"
                  role="tabpanel"
                  tabindex="0"
+                 v-bind:form="form[`Step${currentIndex+1}`]"
+                 v-bind:validation="$v[`Step${currentIndex+1}`]"
                  :aria-label="currentStep"/>
     </keep-alive>
-
     <div class="Wizard-footer">
-      <button v-if="currentIndex > 0" @click="changeStepByIndex(currentIndex -1)">Return</button>
-      <button v-if="currentIndex < Object.keys(stepsList).length-1" @click="changeStepByIndex(currentIndex +1)">Continue
+      <button v-if="currentIndex > 0"
+              @click="changeStepByIndex(currentIndex -1)">Return
       </button>
-      <button v-if="currentIndex == Object.keys(stepsList).length-1">Submit</button>
+      <button v-if="currentIndex < Object.keys(stepsList).length-1"
+              :disabled="$v[`Step${currentIndex+1}`].$invalid"
+              @click="changeStepByIndex(currentIndex +1)">Continue
+      </button>
+      <button v-if="currentIndex == Object.keys(stepsList).length-1"
+              :disabled="$v.$invalid">Submit</button>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .Wizard {
-  max-width: 1200px;
+  max-width: 600px;
   margin: 40px auto;
 }
 
 .Wizard-tabList {
-  text-align: center;
+ display: flex;
+ justify-content: space-between;
   margin-bottom: 20px;
-}
-
-.Wizard-tabButton {
-  margin-right: 44px;
 }
 
 .Wizard-panel {
@@ -80,8 +112,13 @@ function changeStepByIndex(index) {
   }
 }
 
-.Wizard-footer{
+.Wizard-footer {
   display: flex;
   justify-content: space-between;
+  clear: both;
+}
+
+.Step-input {
+  margin-bottom: 20px;
 }
 </style>
