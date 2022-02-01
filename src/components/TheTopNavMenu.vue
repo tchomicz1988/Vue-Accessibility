@@ -11,6 +11,7 @@ let navMenuOpened = ref(false);
 
 watch(router.currentRoute, (value: RouteLocationNormalizedLoaded) => {
   currentPath.value = value.path;
+  navMenuOpened.value = false
 })
 
 function toggleMenu() {

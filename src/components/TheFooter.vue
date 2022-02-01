@@ -125,12 +125,17 @@ watch(router.currentRoute, (value: RouteLocationNormalizedLoaded) => {
   img{
     width: 100%;
   }
+  @include mobile{
+    display: none;
+  }
 }
 .Footer{
   background: var(--color-gray-light);
   padding: 80px 0;
   font-size: 1.6rem;
-
+  @include mobile{
+   padding: 20px;
+  }
   h3{
     font-weight: bold;
   }
@@ -154,12 +159,18 @@ watch(router.currentRoute, (value: RouteLocationNormalizedLoaded) => {
   margin: auto;
   display: flex;
   justify-content: space-between;
+
 }
 
 .FooterNav{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 44px;
+
+  @include mobile {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
 }
 

@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <h1>Ups not found ...</h1>
+    <h1>Ups not found ...</h1>
 </template>
 
 <style scoped>

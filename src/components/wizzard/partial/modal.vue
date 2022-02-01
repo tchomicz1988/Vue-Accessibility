@@ -1,17 +1,54 @@
 <script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue';
+
+const first = ref(null);
+const buttonClose = ref(null);
+const modal = ref(null);
+let keyboardfocusableElements = reactive([]);
+
+onMounted(()=>{
+  keyboardfocusableElements = modal.value.querySelectorAll(
+      'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+  )
+})
+
+function switchToFirst(){
+  first.value.focus();
+}
+
+function handleFirst(event:any) {
+
+  if(event?.relatedTarget.className === "modal-close"){
+    keyboardfocusableElements[keyboardfocusableElements.length - 1].focus();
+  }else{
+    buttonClose.value.focus();
+  }
+
+}
+
+
+
 </script>
 
 <template>
   <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
+    <div class="modal-mask" tabindex="-1">
+      <div ref="first"
+           tabindex="0"
+           @focus="handleFirst($event)"></div>
+      <div ref="modal"
+           class="modal-wrapper"
+           role="dialog">
         <div class="modal-container">
 
           <div class="modal-header">
             <slot name="header">
               default header
             </slot>
-            <button class="modal-close" @click="$emit('close')"><span class="acc-hide">close</span> <span
+            <button ref="buttonClose"
+                    class="modal-close"
+                    @click="$emit('close')">
+              <span class="acc-hide">close</span> <span
                 aria-hidden="true">X</span></button>
           </div>
 
@@ -23,7 +60,6 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
               <button @click="$emit('close')">
                 Add
               </button>
@@ -31,6 +67,9 @@
           </div>
         </div>
       </div>
+      <div tabindex="0"
+           ref="last"
+           @focusin="switchToFirst($event)"></div>
     </div>
   </transition>
 </template>
@@ -49,6 +88,10 @@
   h3 {
     font-weight: bold;
   }
+}
+.modal-close{
+  border-color: #fff !important;
+  min-width: 40px !important;
 }
 
 .modal-footer {

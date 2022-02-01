@@ -19,18 +19,12 @@ const modalForm = reactive<expenseInterface>({
 })
 const showModal = ref(false);
 const editedItemId = ref('');
-const inputText = ref(null);
+const addButton = ref(null);
 
-const expenseList: expenseInterface[] = reactive([]);
+const expenseList: expenseInterface[] = reactive([...props.form.expense]);
 
 
 const $v: Ref<Validation> = useVuelidate(MODAL_FORM_VALIDATIONS, modalForm, {$autoDirty: true})
-
-// watchEffect(()=>{
-//   if(showModal.value === true){
-//     s
-//   }
-// })
 
 async function addExpense() {
   const valid = await $v.value.$validate();
@@ -55,7 +49,7 @@ function removeExpense(id: string) {
   props.form.expense = expenseList;
 }
 
-function editModeExpense(id: string) {
+function editModeExpense(id: string, event) {
 
   const itemToEdit = expenseList.find((expense) => {
     return expense.id === id
@@ -64,6 +58,7 @@ function editModeExpense(id: string) {
   modalForm.price = itemToEdit?.price || null
   modalForm.name = itemToEdit?.name || null
   showModal.value = true;
+  event.target.focus();
 }
 
 function saveExpense() {
@@ -75,7 +70,7 @@ function saveExpense() {
   })
 
   cancelModal();
-
+  addButton.value.focus();
 }
 
 function cancelModal() {
@@ -112,7 +107,7 @@ function openModal() {
             <img src="https://img.icons8.com/ios-glyphs/30/000000/trash--v1.png"
                  alt="remove expense"/>
           </button>
-          <button @click="editModeExpense(expense.id)"
+          <button @click="editModeExpense(expense.id, $event)"
                   class="Table-actionButton">
             <img
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAABc0lEQVRoge2XPUoDURRGT+xsDEJaN6BlhBGE6BpsXIN2KaxN5W50A24goF382YKCSqKFokIsJsO8zNz3hoh5P3IPTJF3b3G+x73DBBRFiYk+8AKMgO3ALgszAKbGMwZ2ghotQFU+qRA2+SRCSPIfwtkYyAI5WpHkC1FbLZrFlgQnzN+y1DPyqyljm/lP4MDoy4D3Ss+zV1OBpoUtQmTkI1Ot9/0rl0jyb8A39RAToXfgX7nEtbCHwJdQN59T/8olLvkCV4jo5Zn9fhV6ox0bky75B1ySN6/yf43Kh0LlQ6HyoVD5UPw7+SlwBbSMPtufkaAfZgBrQA84py53RB4iWvkqF9Qlr0lEHmAfeZySkAfo0CwfdGELzoC2pbYK7CLvRDQ3/wAMsYcoMENEI2+OSVOIHpHJA+wxPxauEG0ikwc4Rn5VroeUqrLiqG0JZ13gkohCuAJsWs43gJMluPyKlqN2CzwC98ANcDc7e/LgpSiKkgg/I5hjvQd+yKwAAAAASUVORK5CYII="
@@ -124,7 +119,9 @@ function openModal() {
 
     </table>
     <div>
-      <button @click="openModal"
+      <button ref="addButton"
+              @click="openModal"
+              v-focus
               class="Table-add">
         <img aria-hidden="true"
              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAMklEQVRIiWNgGGngPxQTDZho5JBRC0YtGEoWMCKxScpAxJpNcx+QCkaLilELRi0YkQAArMYFIENGFBoAAAAASUVORK5CYII="/>
@@ -143,6 +140,7 @@ function openModal() {
                  required="true">
         <FormInput ref="inputText"
                    type="text"
+                   autoFocus="true"
                    v-model="modalForm.name"></FormInput>
         <FormError :message="$v.name.$errors[0]?.$message"/>
       </FormLabel>
@@ -158,9 +156,11 @@ function openModal() {
     <template v-slot:footer>
       <button @click="cancelModal">Cancel</button>
       <button v-if="!editedItemId"
+              :disabled="$v.$invalid"
               @click="addExpense">Add
       </button>
       <button v-if="editedItemId"
+              :disabled="$v.$invalid || !$v.$dirty"
               @click="saveExpense">Save
       </button>
     </template>

@@ -13,6 +13,7 @@
     "v-mask": "^2.3.0",
     "vue": "^3.2.25",
     "vue-input-mask": "^0.0.11",
+    "vue-meta": "^2.4.0",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {

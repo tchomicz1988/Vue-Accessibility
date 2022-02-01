@@ -25,7 +25,7 @@ const props = defineProps<{
       </FormLabel>
 
       <label class="Step-radioOption">
-        <input type="radio" name="purposeOfTravel" value="tourism" v-model="form.proposeOfTravel" /> tourism </label>
+        <input type="radio" name="purposeOfTravel" value="tourism" v-focus v-model="form.proposeOfTravel" /> tourism </label>
       <label class="Step-radioOption">
         <input type="radio" name="purposeOfTravel" value="study" v-model="form.proposeOfTravel"/> study / mental work
       </label>

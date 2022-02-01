@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   type: string;
   modelValue: string | number,
   id: string;
   step: number;
+  autoFocus?: boolean;
 }>(), {
   type: 'text',
   modelValue: '',
   id: '',
-  step: 1
+  step: 1,
+  autoFocus: false,
 })
 const input = ref(null);
 
@@ -18,8 +20,14 @@ const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: string | number): void
 }>()
 
+onMounted(()=>{
+  if(props.autoFocus){
+    focusInput();
+  }
+})
+
 function focusInput(){
-  input.value.focus()
+  input?.value?.focus()
 }
 
 </script>

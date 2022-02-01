@@ -70,14 +70,14 @@
                    to="renting"
                    aria-label="Go to article: Popular Travel Destinations for 2021">
         <img alt="Mountain"
-             src="https://picsum.photos/id/866/200/300"/>
+             src="https://picsum.photos/id/866/300"/>
         <span>Popular Travel Destinations for 2021</span>
       </router-link>
       <router-link class="Home-article"
                    to="renting"
                    aria-label="Go to article: Travel Gear for Safe Travels in 2021">
         <img alt="Mountain"
-             src="https://picsum.photos/id/866/200/300"/>
+             src="https://picsum.photos/id/866/300"/>
         <span>Travel Gear for Safe Travels in 2021</span>
       </router-link>
     </div>
@@ -111,7 +111,7 @@
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/_mixin.scss";
+@import "@/assets/mixin";
 
 .Home-topBanner {
   background-image: url("https://picsum.photos/id/166/1900/600?blur=2");
@@ -120,6 +120,10 @@
   padding: 300px 40px 40px;
   width: 100%;
   position: relative;
+
+  @include mobile{
+    padding: 40px;
+  }
 }
 
 .Home-topBannerText {
@@ -142,6 +146,11 @@
   font-size: 20px;
   max-width: 1200px;
   margin: 80px auto;
+
+  @include mobile {
+   flex-direction: column;
+    padding: 0 4rem;
+  }
 }
 
 .Home-section--articles {
@@ -167,16 +176,35 @@
 }
 
 .Home-articles {
-  display: grid;
-  grid-template-columns: 1fr  1fr  1fr  1fr;
-  grid-gap: 44px;
+  display: flex;
+  flex-wrap: wrap;
 
   a{
+    flex: 1;
     color: var(--color-black);
     border-bottom: 4px solid transparent;
+    padding: 44px;
      &:hover{
        border-color: var(--color-orange);
      }
+
+    @include mobile {
+      padding: 0px;
+    }
+  }
+
+  img{
+    height: 300px;
+    width: 200px;
+    object-fit: cover;
+  }
+  @include mobile {
+    max-width: 100%;
+    flex-direction: column;
+    img{
+      height: 100px;
+      width: 100%;
+    }
   }
 }
 
@@ -187,6 +215,9 @@
 .Home-sectionImage {
   max-width: 50%;
   object-fit: cover;
+  @include mobile {
+  max-width: 100%;
+  }
 }
 
 .Home-section--cite{
@@ -214,6 +245,14 @@
 
   button{
     margin-right: 40px;
+  }
+
+  @include mobile {
+    flex-direction: column;
+
+    button{
+     margin-top: 20px;
+    }
   }
 
 }
